@@ -16,6 +16,10 @@ class _HomeConverState extends State<HomeConver> {
   final euroControl = TextEditingController();
   final btcControl = TextEditingController();
 
+  final _moedas =['REAL','DOLAR','EURO','BTC'];
+  var _itemSelecionadoUm;
+  var _itemSelecionadoDois;
+
   double dolar = 0;
   double euro = 0;
   double btc = 0;
@@ -45,6 +49,7 @@ class _HomeConverState extends State<HomeConver> {
                 btc = double.parse(snapshot.data!['BTCBRL']['bid']);
                 // dolar = snapshot.data!['USD']['buy'];
                 // euro = snapshot.data!['EUR']['buy'];
+                
                 return SingleChildScrollView(
                   padding: const EdgeInsets.only(top: 15, left: 10, right: 10),
                   child: Column(
@@ -54,17 +59,88 @@ class _HomeConverState extends State<HomeConver> {
                         Icons.monetization_on_outlined,
                         size: 120,
                       ),
-                      const SizedBox(height: 20),
-                      currencyTextField(
-                          'reais ', 'R\$ ', realControl, _convertReal),
-                      const SizedBox(height: 20),
-                      currencyTextField(
-                          'Dolares', 'US\$ ', dolarControl, _convertDolar),
-                      const SizedBox(height: 20),
-                      currencyTextField(
-                          'Euros', '€ ', euroControl, _convertEuro),
-                      const SizedBox(height: 20),
-                      currencyTextField('Btc', 'B', btcControl, _convertBtc),
+
+                      const SizedBox(
+                        height: 30,
+                      ),
+
+                      DropdownButtonFormField<String>(
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(6),
+                          )
+                        ),
+                        hint: const Text("Selecione..."),
+                        value: _itemSelecionadoUm,
+                        onChanged: (String? value) {
+                          setState(() {
+                            _itemSelecionadoUm = value!;                  
+                          }); 
+                        },
+                        items : _moedas.map((String dropDownStringItem) {
+                          return DropdownMenuItem<String>(
+                            value: dropDownStringItem,
+                            child: Text(dropDownStringItem),
+                          );
+                        }).toList(),
+                      ),
+
+                      const SizedBox(
+                        height: 20,
+                      ),
+
+                      verificaItemSelecionado(_itemSelecionadoUm),
+
+                      const SizedBox(
+                        height: 20,
+                      ),
+
+                      const Icon(
+                        Icons.arrow_downward,
+                        size: 40,
+                      ),
+
+                      const SizedBox(
+                        height: 20,
+                      ),
+
+                      DropdownButtonFormField<String>(
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(6),
+                          )
+                        ),
+                        hint: const Text("Selecione..."),
+                        value: _itemSelecionadoDois,
+                        onChanged: (String? value) {
+                          setState(() {
+                            _itemSelecionadoDois = value!;                  
+                          }); 
+                        },
+                        items : _moedas.map((String dropDownStringItem) {
+                          return DropdownMenuItem<String>(
+                            value: dropDownStringItem,
+                            child: Text(dropDownStringItem),
+                          );
+                        }).toList(),
+                      ),
+
+                      const SizedBox(
+                        height: 20,
+                      ),
+
+                      verificaItemSelecionado(_itemSelecionadoDois),
+
+
+                      // const SizedBox(height: 20),
+                      // const SizedBox(height: 20),
+                      // currencyTextField(
+                      //     'Dolares', 'US\$ ', dolarControl, _convertDolar),
+                      // const SizedBox(height: 20),
+                      // currencyTextField(
+                      //     'Euros', '€ ', euroControl, _convertEuro),
+                      // const SizedBox(height: 20),
+                      // currencyTextField('Btc', 'B', btcControl, _convertBtc),
                     ],
                   ),
                 );
@@ -76,6 +152,20 @@ class _HomeConverState extends State<HomeConver> {
             }
           },
         ));
+  }
+
+
+  TextField verificaItemSelecionado(String _itemSelecionado) {
+
+    if (_itemSelecionado == "DOLAR"){
+      return currencyTextField('Dolares', 'US\$ ', dolarControl, _convertDolar);
+    } else if (_itemSelecionado == "EURO") {
+      return currencyTextField('Euros', '€ ', euroControl, _convertEuro);
+    } else if (_itemSelecionado == "BTC") {
+      return currencyTextField('Btc', 'B', btcControl, _convertBtc);
+    } else {
+      return currencyTextField('reais ', 'R\$ ', realControl, _convertReal);
+    }
   }
 
   TextField currencyTextField(String label, String prefixText,
