@@ -57,47 +57,7 @@ class _HomeConverState extends State<HomeConver> {
                     children: <Widget>[
                       const Icon(
                         Icons.monetization_on_outlined,
-                        size: 120,
-                      ),
-
-                      const SizedBox(
-                        height: 30,
-                      ),
-
-                      DropdownButtonFormField<String>(
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(6),
-                          )
-                        ),
-                        hint: const Text("Selecione..."),
-                        value: _itemSelecionadoUm,
-                        onChanged: (String? value) {
-                          setState(() {
-                            _itemSelecionadoUm = value!;                  
-                          }); 
-                        },
-                        items : _moedas.map((String dropDownStringItem) {
-                          return DropdownMenuItem<String>(
-                            value: dropDownStringItem,
-                            child: Text(dropDownStringItem),
-                          );
-                        }).toList(),
-                      ),
-
-                      const SizedBox(
-                        height: 20,
-                      ),
-
-                      verificaItemSelecionado(_itemSelecionadoUm),
-
-                      const SizedBox(
-                        height: 20,
-                      ),
-
-                      const Icon(
-                        Icons.arrow_downward,
-                        size: 40,
+                        size: 100,
                       ),
 
                       const SizedBox(
@@ -111,11 +71,9 @@ class _HomeConverState extends State<HomeConver> {
                           )
                         ),
                         hint: const Text("Selecione..."),
-                        value: _itemSelecionadoDois,
+                        value: (_itemSelecionadoUm != null) ? _itemSelecionadoUm : _itemSelecionadoUm = "REAL",
                         onChanged: (String? value) {
-                          setState(() {
-                            _itemSelecionadoDois = value!;                  
-                          }); 
+                          mudaStateUm(value);
                         },
                         items : _moedas.map((String dropDownStringItem) {
                           return DropdownMenuItem<String>(
@@ -129,18 +87,49 @@ class _HomeConverState extends State<HomeConver> {
                         height: 20,
                       ),
 
-                      verificaItemSelecionado(_itemSelecionadoDois),
+                      verificaItemSelecionado((_itemSelecionadoUm != null) ? _itemSelecionadoUm : _itemSelecionadoUm = "REAL"),
+                      
+                      const SizedBox(
+                        height: 10,
+                      ),
 
+                      IconButton(
+                        onPressed: () => {
+                          inverterCampos()
+                        }, 
+                        icon: const Icon(Icons.change_circle_rounded),
+                        iconSize: 50,
+                      ),
+                      
 
-                      // const SizedBox(height: 20),
-                      // const SizedBox(height: 20),
-                      // currencyTextField(
-                      //     'Dolares', 'US\$ ', dolarControl, _convertDolar),
-                      // const SizedBox(height: 20),
-                      // currencyTextField(
-                      //     'Euros', '€ ', euroControl, _convertEuro),
-                      // const SizedBox(height: 20),
-                      // currencyTextField('Btc', 'B', btcControl, _convertBtc),
+                      const SizedBox(
+                        height: 10,
+                      ),
+
+                      DropdownButtonFormField<String>(
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(6),
+                          )
+                        ),
+                        hint: const Text("Selecione..."),
+                        value: (_itemSelecionadoDois != null) ? _itemSelecionadoDois : _itemSelecionadoDois = "DOLAR",
+                        onChanged: (String? value) {
+                          mudaStateDois(value);
+                        },
+                        items : _moedas.map((String dropDownStringItem) {
+                          return DropdownMenuItem<String>(
+                            value: dropDownStringItem,
+                            child: Text(dropDownStringItem),
+                          );
+                        }).toList(),
+                      ),
+
+                      const SizedBox(
+                        height: 20,
+                      ),
+
+                      verificaItemSelecionado((_itemSelecionadoDois != null) ? _itemSelecionadoDois : _itemSelecionadoDois = "DOLAR"),
                     ],
                   ),
                 );
@@ -154,6 +143,26 @@ class _HomeConverState extends State<HomeConver> {
         ));
   }
 
+  void mudaStateUm(String? value) {
+    return setState(() {
+      _itemSelecionadoUm = value!;                  
+    });
+  }
+
+  void mudaStateDois(String? value) {
+    return setState(() {
+      _itemSelecionadoDois = value!;                  
+    });
+  }
+
+  void inverterCampos() {
+    var itemUm = _itemSelecionadoUm;    
+    var itemDois = _itemSelecionadoDois;
+
+    mudaStateUm(itemDois);
+    mudaStateDois(itemUm);
+    
+  }
 
   TextField verificaItemSelecionado(String _itemSelecionado) {
 
