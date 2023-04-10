@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+// import 'package:http/http.dart' as http;
 
 class HomeConver extends StatefulWidget {
   const HomeConver({Key? key}) : super(key: key);
@@ -16,7 +16,7 @@ class _HomeConverState extends State<HomeConver> {
   final euroControl = TextEditingController();
   final btcControl = TextEditingController();
 
-  final _moedas =['REAL','DOLAR','EURO','BTC'];
+  final _moedas = ['REAL','DOLAR','EURO','BTC'];
   var _itemSelecionadoUm;
   var _itemSelecionadoDois;
 
@@ -51,43 +51,51 @@ class _HomeConverState extends State<HomeConver> {
                 // euro = snapshot.data!['EUR']['buy'];
                 
                 return SingleChildScrollView(
-                  padding: const EdgeInsets.only(top: 15, left: 10, right: 10),
+                  padding: const EdgeInsets.only(top: 15, left: 15, right: 15),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
                       const Icon(
                         Icons.monetization_on_outlined,
-                        size: 100,
+                        size: 120,
                       ),
 
                       const SizedBox(
-                        height: 20,
+                        height: 30,
                       ),
 
-                      DropdownButtonFormField<String>(
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(6),
-                          )
-                        ),
-                        hint: const Text("Selecione..."),
-                        value: (_itemSelecionadoUm != null) ? _itemSelecionadoUm : _itemSelecionadoUm = "REAL",
-                        onChanged: (String? value) {
-                          mudaStateUm(value);
-                        },
-                        items : _moedas.map((String dropDownStringItem) {
-                          return DropdownMenuItem<String>(
-                            value: dropDownStringItem,
-                            child: Text(dropDownStringItem),
-                          );
-                        }).toList(),
+                      Row(
+                        children: <Widget>[ 
+                          Expanded(child: 
+                            verificaItemSelecionado((_itemSelecionadoUm != null) ? _itemSelecionadoUm : _itemSelecionadoUm = "REAL"),
+                          ),
+                          Container(
+                            height: 59,
+                            decoration: BoxDecoration(
+                              border: Border.all (
+                                width: 1.5, 
+                                color: const Color.fromARGB(255, 185, 185, 185)
+                                ),
+                                borderRadius: const BorderRadius.only(topRight: Radius.circular(6), bottomRight: Radius.circular(6)),
+                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 5),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                hint: const Text("Selecione..."),
+                                value: (_itemSelecionadoUm != null) ? _itemSelecionadoUm : _itemSelecionadoUm = "REAL",
+                                onChanged: (String? value) {
+                                  mudaStateUm(value);
+                                },
+                                items : _moedas.map((String dropDownStringItem) =>  DropdownMenuItem<String>(
+                                    value: dropDownStringItem,
+                                    child: Text(dropDownStringItem),
+                                  )
+                                ).toList(),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-
-                      const SizedBox(
-                        height: 20,
-                      ),
-
-                      verificaItemSelecionado((_itemSelecionadoUm != null) ? _itemSelecionadoUm : _itemSelecionadoUm = "REAL"),
                       
                       const SizedBox(
                         height: 10,
@@ -106,30 +114,38 @@ class _HomeConverState extends State<HomeConver> {
                         height: 10,
                       ),
 
-                      DropdownButtonFormField<String>(
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(6),
-                          )
-                        ),
-                        hint: const Text("Selecione..."),
-                        value: (_itemSelecionadoDois != null) ? _itemSelecionadoDois : _itemSelecionadoDois = "DOLAR",
-                        onChanged: (String? value) {
-                          mudaStateDois(value);
-                        },
-                        items : _moedas.map((String dropDownStringItem) {
-                          return DropdownMenuItem<String>(
-                            value: dropDownStringItem,
-                            child: Text(dropDownStringItem),
-                          );
-                        }).toList(),
+                      Row(
+                        children: <Widget>[ 
+                          Expanded(child: 
+                            verificaItemSelecionado((_itemSelecionadoDois != null) ? _itemSelecionadoDois : _itemSelecionadoDois = "REAL"),
+                          ),
+                          Container(
+                            height: 59,
+                            decoration: BoxDecoration(
+                              border: Border.all (
+                                width: 1.5, 
+                                color: const Color.fromARGB(255, 185, 185, 185)
+                                ),
+                                borderRadius: const BorderRadius.only(topRight: Radius.circular(6), bottomRight: Radius.circular(6)),
+                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 5),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                hint: const Text("Selecione..."),
+                                value: (_itemSelecionadoDois != null) ? _itemSelecionadoDois : _itemSelecionadoDois = "REAL",
+                                onChanged: (String? value) {
+                                  mudaStateDois(value);
+                                },
+                                items : _moedas.map((String dropDownStringItem) =>  DropdownMenuItem<String>(
+                                    value: dropDownStringItem,
+                                    child: Text(dropDownStringItem),
+                                  )
+                                ).toList(),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-
-                      const SizedBox(
-                        height: 20,
-                      ),
-
-                      verificaItemSelecionado((_itemSelecionadoDois != null) ? _itemSelecionadoDois : _itemSelecionadoDois = "DOLAR"),
                     ],
                   ),
                 );
@@ -178,12 +194,15 @@ class _HomeConverState extends State<HomeConver> {
   }
 
   TextField currencyTextField(String label, String prefixText,
-      TextEditingController controller, Function f) {
+                  TextEditingController controller, Function f) {
     return TextField(
       controller: controller,
       decoration: InputDecoration(
         labelText: label,
-        border: const OutlineInputBorder(),
+        border: const OutlineInputBorder(
+          borderRadius: BorderRadius.only(topLeft: Radius.circular(6), bottomLeft: Radius.circular(6))
+        ),
+        
         prefixText: prefixText,
       ),
       onChanged: (value) => f(value),
@@ -257,42 +276,56 @@ Future<Map> getData() async {
   //* ENDEREÇO DA API NOVA
   //* https://docs.awesomeapi.com.br/api-de-moedas
 
-  const requestApi =
-      "https://economia.awesomeapi.com.br/json/last/USD-BRL,EUR-BRL,BTC-BRL";
-  var response = await http.get(Uri.parse(requestApi));
-  return jsonDecode(response.body);
+  // const requestApi =
+  //     "https://economia.awesomeapi.com.br/json/last/USD-BRL,EUR-BRL,BTC-BRL";
+  // var response = await http.get(Uri.parse(requestApi));
+  // return jsonDecode(response.body);
 
-  //* json manual para teste em caso de
-  //* problema com a conexão http
-/*   var response = {
+  // json manual para teste em caso de
+  // problema com a conexão http
+   var response = 
+   { 
     "USDBRL": {
       "code": "USD",
       "codein": "BRL",
       "name": "Dólar Americano/Real Brasileiro",
-      "high": "5.3388",
-      "low": "5.2976",
-      "varBid": "0.0382",
-      "pctChange": "0.72",
-      "bid": "5.3348",
-      "ask": "5.3363",
-      "timestamp": "1679660987",
-      "create_date": "2023-03-24 09:29:47"
+      "high": "5.083",
+      "low": "5.0342",
+      "varBid": "0.029",
+      "pctChange": "0.58",
+      "bid": "5.0624",
+      "ask": "5.0635",
+      "timestamp": "1680801158",
+      "create_date": "2023-04-06 14:12:38"
     },
-    "EURBRL": {
+      "EURBRL": {
       "code": "EUR",
       "codein": "BRL",
       "name": "Euro/Real Brasileiro",
-      "high": "5.7429",
-      "low": "5.6772",
-      "varBid": "-0.0095",
-      "pctChange": "-0.17",
-      "bid": "5.7256",
-      "ask": "5.7293",
-      "timestamp": "1679660999",
-      "create_date": "2023-03-24 09:29:59"
+      "high": "5.5405",
+      "low": "5.4798",
+      "varBid": "0.0444",
+      "pctChange": "0.81",
+      "bid": "5.5337",
+      "ask": "5.5363",
+      "timestamp": "1680801158",
+      "create_date": "2023-04-06 14:12:38"
+    },
+      "BTCBRL": {
+      "code": "BTC",
+      "codein": "BRL",
+      "name": "Bitcoin/Real Brasileiro",
+      "high": "143921",
+      "low": "141346",
+      "varBid": "829",
+      "pctChange": "0.58",
+      "bid": "142945",
+      "ask": "142945",
+      "timestamp": "1680800867",
+      "create_date": "2023-04-06 14:07:47"
     }
   };
 
   return jsonDecode(jsonEncode(response));
- */
+
 }
